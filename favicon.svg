@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- agsork studio — Pixel-A, helle Variante (weiss auf Hellgrau) -->
-  <rect width="100" height="100" rx="22" fill="#e7e8ea"/>
-  <path fill="#ffffff" d="
-    M24 26 H43 V32 H57 V26 H76 V74 H62 V60 H38 V74 H24 Z
-    M38 40 H62 V50 H38 Z
-  " fill-rule="evenodd"/>
-</svg>
