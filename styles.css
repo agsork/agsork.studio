@@ -1683,7 +1683,10 @@ img, svg, canvas { display: block; max-width: 100%; }
    ============================================================ */
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* aktuell nur eine Karte (E-Mail): zentriert, angenehme Breite.
+     Sobald wieder mehrere Kanäle verlinkt sind: repeat(3, 1fr) */
+  grid-template-columns: minmax(0, 480px);
+  justify-content: center;
   gap: clamp(1rem, 2.5vw, 1.6rem);
 }
 .contact-item {
