@@ -8,6 +8,11 @@
    5. Milkshake-Reveals (IntersectionObserver)
    6. Navigation (Scroll-Zustand, Mobile-Menü)
    7. Magnetische Buttons
+   8. Cursor-Spotlight-Textmaske (Aufgabe 5)
+   9. 3D-Tilt auf dem Hero-Mockup (Aufgabe 7)
+   10. Sanftes Scroll-Snap in Angebot A (Aufgabe 9)
+   11. Projekt-Spotlight-Bildreveal (Aufgabe 11)
+   12. Rechtliches: Impressum-/Datenschutz-Modals (Footer)
    ============================================================ */
 (() => {
   "use strict";
@@ -709,6 +714,44 @@
       demo.style.setProperty("--mx", "0.72");
       demo.style.setProperty("--my", "0.35");
     });
+
+    // Touch-Geräte: keine Maus → die Demo spielt von selbst (sanfte
+    // Lissajous-Bahn), Texte werden angepasst, Loop pausiert ausser Sicht.
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      const card = demo.closest(".play-card");
+      const h4 = card && card.querySelector(".play-card-head h4");
+      const lead = card && card.querySelector(".play-card-head p");
+      if (h4) h4.textContent = "Immer in Bewegung.";
+      if (lead)
+        lead.textContent =
+          "Die Vorschau spielt von selbst — Licht, Layout und Typo reagieren.";
+      demo.setAttribute(
+        "aria-label",
+        "Website-Vorschau mit automatischer Bewegung"
+      );
+      if (prefersReducedMotion) {
+        demo.style.setProperty("--mx", "0.65");
+        demo.style.setProperty("--my", "0.4");
+      } else {
+        let t = 0,
+          raf = null;
+        const tick = () => {
+          t += 0.012;
+          demo.style.setProperty("--mx", (0.5 + 0.42 * Math.sin(t * 1.3)).toFixed(3));
+          demo.style.setProperty("--my", (0.5 + 0.4 * Math.cos(t * 0.9)).toFixed(3));
+          raf = requestAnimationFrame(tick);
+        };
+        const start = () => { if (raf == null) raf = requestAnimationFrame(tick); };
+        const stop = () => { if (raf != null) { cancelAnimationFrame(raf); raf = null; } };
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver((entries) => {
+            entries.forEach((e) => (e.isIntersecting ? start() : stop()));
+          }).observe(demo);
+        } else {
+          start();
+        }
+      }
+    }
   })();
 
   /* ==========================================================
@@ -812,6 +855,284 @@
       el.addEventListener("pointerleave", () => {
         el.style.transform = "";
       });
+    });
+  })();
+
+  /* ==========================================================
+     8 — CURSOR-SPOTLIGHT-TEXTMASKE (Aufgabe 5)
+     Zwei deckungsgleiche Textebenen (Basis gedimmt, Overlay per
+     Maske um den Cursor). Nur bei feinem Pointer + Motion-OK,
+     sonst bleibt der Text in vollem Kontrast (--c-mid).
+     ========================================================== */
+  (() => {
+    if (prefersReducedMotion) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const GRAD =
+      "radial-gradient(circle 80px at 10px 10px, #000 0%, transparent 100%)";
+    const supportsMask =
+      window.CSS &&
+      (CSS.supports("mask-image", GRAD) ||
+        CSS.supports("-webkit-mask-image", GRAD));
+    if (!supportsMask) return;
+
+    document.querySelectorAll(".section-lead, .hero-sub").forEach((el) => {
+      // nur reine Textabsätze — beide Ebenen müssen deckungsgleich sein
+      if (el.children.length > 0) return;
+      el.dataset.text = el.textContent.replace(/\s+/g, " ").trim();
+      el.classList.add("spotlight-on");
+
+      let idleTimer = null;
+      // Radius klingt bei Stillstand/Verlassen über ~0.9s auf 0 ab
+      const calm = () => {
+        el.style.setProperty("--r-speed", "0.9s");
+        el.style.setProperty("--r", "0px");
+      };
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--x", (e.clientX - r.left).toFixed(1) + "px");
+        el.style.setProperty("--y", (e.clientY - r.top).toFixed(1) + "px");
+        // Radius wächst in ~200ms auf 100px
+        el.style.setProperty("--r-speed", "0.2s");
+        el.style.setProperty("--r", "100px");
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(calm, 320);
+      });
+      el.addEventListener("pointerleave", () => {
+        clearTimeout(idleTimer);
+        calm();
+      });
+    });
+  })();
+
+  /* ==========================================================
+     9 — 3D-TILT AUF DEM HERO-MOCKUP (Aufgabe 7)
+     Folgt der Cursor-Position (rotateX/rotateY um die Ruhepose),
+     federt bei pointerleave zurück. NUR .hero-visual .hv-browser —
+     bewusst nicht auf .play-card/.price-card (dosiert).
+     ========================================================== */
+  (() => {
+    if (prefersReducedMotion) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const wrap = document.querySelector(".hero-visual");
+    const card = wrap ? wrap.querySelector(".hv-browser") : null;
+    if (!card) return;
+    const desktop = window.matchMedia("(min-width: 901px)");
+
+    const BASE_RX = 2.5, BASE_RY = -7; // Ruhepose wie im CSS
+    const AMP_RX = 6, AMP_RY = 8;      // max. Auslenkung in Grad
+    let tx = BASE_RX, ty = BASE_RY;    // Ziel
+    let cx = BASE_RX, cy = BASE_RY;    // aktuell (gelerpt)
+    let raf = null;
+
+    const apply = () => {
+      card.style.transform =
+        "rotateX(" + cx.toFixed(2) + "deg) rotateY(" + cy.toFixed(2) + "deg)";
+    };
+    const tick = () => {
+      cx += (tx - cx) * 0.12;
+      cy += (ty - cy) * 0.12;
+      apply();
+      if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.02) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        cx = tx; cy = ty; apply();
+        raf = null;
+      }
+    };
+    const kick = () => { if (raf == null) raf = requestAnimationFrame(tick); };
+
+    wrap.addEventListener("pointermove", (e) => {
+      if (!desktop.matches) return;
+      card.style.transition = "none"; // JS-Lerp übernimmt das Easing
+      const r = wrap.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - 0.5;  // -0.5 … 0.5
+      const ny = (e.clientY - r.top) / r.height - 0.5;
+      tx = BASE_RX - ny * AMP_RX * 2;
+      ty = BASE_RY + nx * AMP_RY * 2;
+      kick();
+    });
+    wrap.addEventListener("pointerleave", () => {
+      tx = BASE_RX; ty = BASE_RY;
+      kick();
+    });
+    // unter 901px steuert wieder das CSS (Mobile: transform: none)
+    desktop.addEventListener("change", (e) => {
+      if (!e.matches) {
+        if (raf != null) { cancelAnimationFrame(raf); raf = null; }
+        card.style.transform = "";
+        card.style.transition = "";
+        tx = cx = BASE_RX; ty = cy = BASE_RY;
+      }
+    });
+  })();
+
+  /* ==========================================================
+     10 — SANFTES SCROLL-SNAP IN ANGEBOT A (Aufgabe 9, niedrige
+     Priorität). KEIN Wheel-/Touch-Hijacking: korrigiert erst
+     nach dem natürlichen Scroll-Ende per smooth scrollBy.
+     ========================================================== */
+  (() => {
+    if (prefersReducedMotion) return;
+    const section = document.getElementById("wsScroll");
+    if (!section) return;
+    const total = parseInt(section.dataset.steps || "4", 10);
+    const desktop = window.matchMedia("(min-width: 901px)");
+    let timer = null;
+
+    function trySnap() {
+      if (!desktop.matches) return; // Mobile: statische Liste, kein Snap
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const scrollable = rect.height - vh;
+      if (scrollable <= 0) return;
+      const progress = -rect.top / scrollable;
+      if (progress <= 0.02 || progress >= 0.98) return; // nur solange gepinnt
+      const stepF = progress * total;
+      let center = Math.round(stepF - 0.5) + 0.5; // nächste Schritt-Mitte
+      center = Math.max(0.5, Math.min(total - 0.5, center));
+      const delta = (center / total - progress) * scrollable;
+      if (Math.abs(delta) < 6) return; // schon nah genug
+      window.scrollBy({ top: delta, behavior: "smooth" });
+    }
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        clearTimeout(timer);
+        timer = setTimeout(trySnap, 220);
+      },
+      { passive: true }
+    );
+  })();
+
+  /* ==========================================================
+     11 — PROJEKT-SPOTLIGHT: BILD-REVEAL (Aufgabe 11)
+     Gleiche Progress-Berechnung wie ScrollStory, aber pro Bild
+     ein eigener Schwellenwert (gestaffelter Einflug).
+     ========================================================== */
+  (() => {
+    const blocks = document.querySelectorAll(".project-spotlight");
+    if (!blocks.length) return;
+    blocks.forEach((block) => {
+      const imgs = Array.from(block.querySelectorAll(".ps-img"));
+      if (!imgs.length) return;
+      if (prefersReducedMotion) {
+        imgs.forEach((el) => el.classList.add("is-in"));
+        return;
+      }
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const rect = block.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const scrollable = rect.height - vh;
+        let progress = scrollable > 0 ? -rect.top / scrollable : 1;
+        progress = Math.max(0, Math.min(1, progress));
+        imgs.forEach((el, i) => {
+          const threshold =
+            0.12 + (i * 0.55) / Math.max(1, imgs.length - 1); // 0.12 … 0.67
+          el.classList.toggle("is-in", progress >= threshold);
+        });
+      };
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        },
+        { passive: true }
+      );
+      window.addEventListener("resize", update, { passive: true });
+      update();
+    });
+  })();
+
+  /* ==========================================================
+     12 — RECHTLICHES: IMPRESSUM-/DATENSCHUTZ-MODALS
+     Zwei getrennte Dialoge, geöffnet über die Footer-Links.
+     Barrierearm: aria-hidden-Umschaltung, Fokus-Falle im Dialog,
+     Schliessen per ESC, Klick auf den Hintergrund oder ×; der
+     Fokus kehrt danach zum auslösenden Button zurück.
+     ========================================================== */
+  (() => {
+    const triggers = Array.from(document.querySelectorAll("[data-modal-open]"));
+    if (!triggers.length) return;
+
+    const FOCUSABLE =
+      'a[href], button:not([disabled]), input:not([disabled]), ' +
+      'select:not([disabled]), textarea:not([disabled]), ' +
+      '[tabindex]:not([tabindex="-1"])';
+
+    let activeModal = null; // aktuell offener Dialog
+    let lastTrigger = null; // Button, der ihn geöffnet hat
+
+    const open = (modal, trigger) => {
+      activeModal = modal;
+      lastTrigger = trigger || null;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open"); // Seite dahinter einfrieren
+      const card = modal.querySelector(".modal-card");
+      if (card) card.focus(); // Screenreader liest den Titel (aria-labelledby)
+    };
+
+    const close = () => {
+      if (!activeModal) return;
+      const modal = activeModal;
+      activeModal = null;
+      // erst Fokus zurückgeben, DANN verstecken — sonst läge der Fokus
+      // kurz in einem aria-hidden-Teilbaum
+      if (lastTrigger) lastTrigger.focus();
+      lastTrigger = null;
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    };
+
+    triggers.forEach((btn) => {
+      const modal = document.getElementById(btn.dataset.modalOpen);
+      if (!modal) return;
+      btn.addEventListener("click", () => open(modal, btn));
+    });
+
+    // Schliessen: ×-Button und Klick auf den Hintergrund tragen beide
+    // data-modal-close; Klicks in die Karte selbst bleiben wirkungslos.
+    document.querySelectorAll(".modal").forEach((modal) => {
+      modal.addEventListener("click", (e) => {
+        if (e.target.closest("[data-modal-close]")) close();
+      });
+    });
+
+    // Tastatur: ESC schliesst, Tab bleibt im Dialog (Fokus-Falle)
+    document.addEventListener("keydown", (e) => {
+      if (!activeModal) return;
+      if (e.key === "Escape") {
+        close();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const focusable = Array.from(activeModal.querySelectorAll(FOCUSABLE));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const card = activeModal.querySelector(".modal-card");
+      // Fokus ausserhalb (z. B. nach Klick in die Karte) → zurückholen
+      if (!activeModal.contains(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+        return;
+      }
+      if (e.shiftKey) {
+        if (document.activeElement === first || document.activeElement === card) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     });
   })();
 
