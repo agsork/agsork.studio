@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angebot — agsork studio</title>
+  <meta
+    name="description"
+    content="Website-Erstellung und Social Media für Unternehmen im Thurgau: Design, Umsetzung, Hosting und Wartung — plus kuratierte Beiträge auf Instagram und Facebook."
+  />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://agsork.studio/angebot/" />
+  <meta property="og:title" content="Angebot — agsork studio" />
+  <meta property="og:description" content="Website-Erstellung und Social Media für Unternehmen im Thurgau: Design, Umsetzung, Hosting und Wartung — plus kuratierte Beiträge auf Instagram und Facebook." />
+  <meta property="og:locale" content="de_CH" />
+  <meta property="og:site_name" content="agsork studio" />
+  <meta property="og:image" content="https://agsork.studio/og-image.jpg" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@AgsorkStudio" />
+  <meta name="twitter:image" content="https://agsork.studio/og-image.jpg" />
+  <meta name="twitter:title" content="Angebot — agsork studio" />
+  <meta name="twitter:description" content="Website-Erstellung und Social Media für Unternehmen im Thurgau: Design, Umsetzung, Hosting und Wartung — plus kuratierte Beiträge auf Instagram und Facebook." />
+
+  <link rel="canonical" href="https://agsork.studio/angebot/" />
+
+  <!-- Favicon: Original-Logo (PNG) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+
+  <!-- Schriften werden lokal gehostet (DSGVO/DSG Schweiz): @font-face in
+       styles.css, Dateien unter /fonts/. Keine Anfrage an Google-Server. -->
+
+  <link rel="stylesheet" href="/styles.css?v=1.4.8" />
+</head>
+
+<body>
+  <!-- Skip-Link für Tastatur-/Screenreader-Nutzung -->
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <!-- ============================================================
+       KOPFZEILE / NAVIGATION
+       Die volle Leiste minimiert sich beim Scrollen in die
+       Liquid-Glass-Pille (.glass-dock); Refraktion via SVG-Filter
+       (script.js, GlassDock), Fallback: Frosted Glass.
+       ============================================================ -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-shell">
+      <div class="glass-dock" id="glassDock">
+        <a class="wordmark" href="/" aria-label="agsork studio – Startseite">
+          agsork<span class="wordmark-dot">.</span>studio
+        </a>
+
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-expanded="false"
+          aria-controls="menuOverlay"
+          aria-haspopup="true"
+          aria-label="Menü öffnen"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       NAVIGATIONS-OVERLAY — MENÜ-LISTE
+       Der Drei-Strich-Button fasst die vier Ziele zusammen und öffnet
+       dieses Vollflächen-Overlay: die Ziele erscheinen als klare, grosse
+       Liste (Mechanik in script.js → NavMenu). Jedes Ziel ist eine
+       eigene Seite.
+       ============================================================ -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <nav class="option-wheel" id="navWheel" aria-label="Hauptnavigation">
+      <a class="option-wheel__item" href="/angebot/">Angebot</a>
+      <a class="option-wheel__item" href="/pricing/">Pricing</a>
+      <a class="option-wheel__item" href="/portfolio/">Portfolio</a>
+      <a class="option-wheel__item" href="/kontakt/">Kontakt</a>
+    </nav>
+  </div>
+
+  <main id="main">
+    <!-- ============================================================
+         ANGEBOTE
+         ============================================================ -->
+    <section class="section angebot" id="angebot">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow reveal">01 — Angebot</p>
+          <h2 class="kinetic-title">
+            <span class="kt-row" data-dir="l">Was wir bauen.</span>
+            <span class="kt-row kt-ghost" data-dir="r" aria-hidden="true">Was wir bauen.</span>
+          </h2>
+          <p class="section-lead reveal" style="--i: 1">
+            Zwei Leistungen, ein Anspruch: digitale Auftritte, die so gut
+            aussehen wie das Handwerk dahinter.
+          </p>
+        </header>
+      </div>
+
+      <!-- ---------- 4.1 Website-Erstellung: sticky Scroll-Story ---------- -->
+      <div class="ws-scroll" id="wsScroll" data-steps="4">
+        <div class="ws-sticky">
+          <div class="container ws-grid">
+            <!-- Textspalte: Schritte -->
+            <div class="ws-text">
+              <p class="ws-kicker">Webdesign &amp; Entwicklung</p>
+              <ol class="ws-steps" id="wsSteps">
+                <li class="ws-step is-active" data-step="0">
+                  <span class="ws-num">01</span>
+                  <h3>Design</h3>
+                  <p>
+                    Wir gestalten Layout, Typografie und Bildwelt — ruhig, edel
+                    und ganz auf dein Unternehmen zugeschnitten.
+                  </p>
+                </li>
+                <li class="ws-step" data-step="1">
+                  <span class="ws-num">02</span>
+                  <h3>Umsetzung</h3>
+                  <p>
+                    Sauberer Code, schnelle Ladezeiten, scharf auf jedem Bildschirm.
+                    Aus dem Entwurf wird eine echte, schnelle Website.
+                  </p>
+                </li>
+                <li class="ws-step" data-step="2">
+                  <span class="ws-num">03</span>
+                  <h3>Hosting</h3>
+                  <p>
+                    Wir bringen deine Seite zuverlässig online und kümmern uns um
+                    Domain, Zertifikate und Verfügbarkeit.
+                  </p>
+                </li>
+                <li class="ws-step" data-step="3">
+                  <span class="ws-num">04</span>
+                  <h3>Wartung</h3>
+                  <p>
+                    Updates, kleine Änderungen, neue Inhalte. Deine Website bleibt
+                    aktuell — du musst dich um nichts kümmern.
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+            <!-- Visualspalte: wechselt mit dem Scroll -->
+            <div class="ws-visual" aria-hidden="true">
+              <div class="ws-frame">
+                <!-- 01 Design: Miniatur-Mockup statt abstrakter Balken (Aufgabe 8) -->
+                <div class="ws-vis is-active" data-vis="0">
+                  <div class="mini-browser">
+                    <div class="mb-bar">
+                      <span></span><span></span><span></span>
+                      <em class="mb-url">cafe-central.ch</em>
+                    </div>
+                    <div class="mb-page">
+                      <p class="mb-eyebrow">Café Central</p>
+                      <p class="mb-title">Jeden Tag<br />frisch.</p>
+                      <span class="mb-cta">Karte ansehen</span>
+                      <div class="mb-media"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- 02 Umsetzung -->
+                <div class="ws-vis" data-vis="1">
+                  <div class="vis-build">
+                    <span class="vb-line">&lt;section&gt;</span>
+                    <span class="vb-line vb-indent">&lt;h1&gt;agsork&lt;/h1&gt;</span>
+                    <span class="vb-line vb-indent">&lt;p&gt;…&lt;/p&gt;</span>
+                    <span class="vb-line">&lt;/section&gt;</span>
+                    <span class="vb-caret"></span>
+                  </div>
+                </div>
+                <!-- 03 Hosting: SSL/Domain-Statusanzeige statt Node-Graph (Aufgabe 8) -->
+                <div class="ws-vis" data-vis="2">
+                  <div class="vh-panel">
+                    <p class="vh-url">
+                      <svg class="vh-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                      https://deine-firma.ch
+                    </p>
+                    <ul class="vh-status">
+                      <li><span>SSL-Zertifikat</span><b class="vh-ok">Gültig</b></li>
+                      <li><span>Domain</span><b class="vh-ok">Aktiv</b></li>
+                      <li><span>Server</span><b class="vh-live"><i></i>Online</b></li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- 04 Wartung: „Update verfügbar → installiert"-Sequenz (Aufgabe 8) -->
+                <div class="ws-vis" data-vis="3">
+                  <div class="vu-card">
+                    <p class="vu-row">
+                      <i class="vu-dot"></i>
+                      <span class="vu-text vu-text--avail">Update verfügbar…</span>
+                      <span class="vu-text vu-text--done">✓ Installiert</span>
+                    </p>
+                    <span class="vu-bar"><i class="vu-fill"></i></span>
+                    <p class="vu-meta">Wir kümmern uns — du merkst nichts davon.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fortschrittsanzeige -->
+              <div class="ws-progress">
+                <span class="ws-progress-fill" id="wsProgressFill"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- Social Media Management ---------- -->
+      <div class="social" id="social">
+        <div class="container">
+          <div class="social-panel">
+            <div class="social-copy">
+              <p class="social-kicker reveal">
+                <span class="social-kicker-dot" aria-hidden="true"></span>
+                Social Media Management
+              </p>
+              <h3 class="social-title reveal" style="--i: 1">
+                Sichtbar bleiben,<br />Woche für Woche.
+              </h3>
+              <p class="social-lead reveal" style="--i: 2">
+                Wir übernehmen deine Präsenz auf <strong>Instagram</strong> und
+                <strong>Facebook</strong> — kuratierte Beiträge im Look deiner Marke,
+                einer pro Woche. Du musst dich um nichts kümmern.
+              </p>
+              <ul class="social-points reveal" style="--i: 3">
+                <li>Instagram &amp; Facebook</li>
+                <li>1 Beitrag pro Woche</li>
+                <li>Im Look deiner Marke</li>
+              </ul>
+              <div class="social-actions reveal" style="--i: 4">
+                <a class="btn btn-ghost magnetic" href="/kontakt/">Social Media anfragen</a>
+                <span class="social-price">ab <strong>CHF&nbsp;249</strong>&nbsp;/&nbsp;Monat</span>
+              </div>
+            </div>
+
+            <!-- Visual: ein Beitrag im Marken-Look (das Ergebnis) -->
+            <div class="social-visual reveal" style="--i: 2" aria-hidden="true">
+              <article class="sp-post">
+                <header class="sp-head">
+                  <span class="sp-avatar"></span>
+                  <span class="sp-id"><b>agsork.studio</b><i>Weinfelden · Thurgau</i></span>
+                  <span class="sp-more"><i></i><i></i><i></i></span>
+                </header>
+                <div class="sp-media">
+                  <span class="sp-media-kick">Neues Projekt</span>
+                  <p class="sp-media-title">Frisch<br />live.</p>
+                </div>
+                <div class="sp-bar">
+                  <span class="sp-acts">
+                    <svg viewBox="0 0 24 24" class="sp-ic sp-ic--like" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20S3.5 14.6 3.5 8.9A4.4 4.4 0 0 1 12 6.2 4.4 4.4 0 0 1 20.5 8.9C20.5 14.6 12 20 12 20Z"/></svg>
+                    <svg viewBox="0 0 24 24" class="sp-ic" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+                    <svg viewBox="0 0 24 24" class="sp-ic" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>
+                  </span>
+                  <svg viewBox="0 0 24 24" class="sp-ic" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>
+                </div>
+                <p class="sp-caption"><b>agsork.studio</b> Wieder eine Seite, auf die wir stolz sind. ✦</p>
+              </article>
+              <div class="sp-badge">
+                <span class="sp-badge-dot" aria-hidden="true"></span>
+                1&nbsp;Beitrag / Woche
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-mark">agsork.studio</span>
+      <nav class="footer-legal" aria-label="Rechtliches">
+        <button
+          class="footer-legal-link"
+          type="button"
+          data-modal-open="modalImpressum"
+          aria-haspopup="dialog"
+          aria-controls="modalImpressum"
+        >Impressum</button>
+        <button
+          class="footer-legal-link"
+          type="button"
+          data-modal-open="modalDatenschutz"
+          aria-haspopup="dialog"
+          aria-controls="modalDatenschutz"
+        >Datenschutz</button>
+      </nav>
+      <span class="footer-year" id="footerYear">© 2026 agsork studio</span>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       RECHTLICHES — MODALS (Impressum / Datenschutz)
+       ============================================================ -->
+  <div
+    class="modal"
+    id="modalImpressum"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalImpressumTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card" tabindex="-1">
+      <header class="modal-head">
+        <h2 class="modal-title" id="modalImpressumTitle">Impressum</h2>
+        <button class="modal-close" type="button" data-modal-close aria-label="Dialog schliessen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>
+          Adrian Kux<br />
+          Ottenbergstrasse 26<br />
+          8572 Berg, Schweiz
+        </p>
+        <p>
+          E-Mail: <a href="mailto:adrian.kux@agsork.studio">adrian.kux@agsork.studio</a><br />
+          Telefon: <a href="tel:+41782694229">078 269 42 29</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal"
+    id="modalDatenschutz"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalDatenschutzTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card" tabindex="-1">
+      <header class="modal-head">
+        <h2 class="modal-title" id="modalDatenschutzTitle">Datenschutzerklärung</h2>
+        <button class="modal-close" type="button" data-modal-close aria-label="Dialog schliessen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </header>
+      <div class="modal-body">
+        <h3>Verantwortliche Person</h3>
+        <p>
+          Adrian Kux<br />
+          Ottenbergstrasse 26<br />
+          8572 Berg, Schweiz<br />
+          E-Mail: <a href="mailto:adrian.kux@agsork.studio">adrian.kux@agsork.studio</a>
+        </p>
+        <p>
+          Diese Datenschutzerklärung informiert dich darüber, welche
+          Personendaten beim Besuch von agsork.studio bearbeitet werden.
+        </p>
+        <h3>Hosting und technische Bereitstellung</h3>
+        <p>
+          Diese Website wird über GitHub Pages gehostet und über Cloudflare
+          als Content-Delivery-Netzwerk ausgeliefert. Dabei werden automatisch
+          technische Daten wie deine IP-Adresse, Browsertyp und
+          Zugriffszeitpunkt in Server-Logs verarbeitet. Beide Anbieter haben
+          Serverstandorte auch in den USA; eine Datenübermittlung ins Ausland
+          ist damit möglich.
+        </p>
+        <h3>Schriften</h3>
+        <p>
+          Die verwendeten Schriften werden lokal von diesem Server
+          ausgeliefert. Es werden dabei keine Personendaten an Dritte
+          (insbesondere nicht an Google) übermittelt.
+        </p>
+        <h3>Kontaktaufnahme per E-Mail</h3>
+        <p>
+          Wenn du uns über die auf der Website angegebene E-Mail-Adresse
+          kontaktierst, werden die von dir mitgeteilten Daten (z. B. Name,
+          E-Mail-Adresse, Inhalt deiner Nachricht) zur Bearbeitung deiner
+          Anfrage verwendet. Eingehende E-Mails an adrian.kux@agsork.studio
+          werden über Cloudflare Email Routing an ein Gmail-Postfach
+          (Google LLC, USA) weitergeleitet.
+        </p>
+        <h3>Cookies</h3>
+        <p>Diese Website selbst setzt keine eigenen Cookies.</p>
+        <h3>Deine Rechte</h3>
+        <p>
+          Du hast das Recht, Auskunft über deine bei uns bearbeiteten
+          Personendaten zu verlangen sowie deren Berichtigung oder Löschung
+          zu beantragen. Wende dich dazu an die oben genannte Kontaktadresse.
+        </p>
+        <h3>Änderungen</h3>
+        <p>
+          Wir behalten uns vor, diese Datenschutzerklärung anzupassen, sobald
+          sich die Datenbearbeitung auf dieser Website ändert (z. B. bei
+          Einführung eines Kontaktformulars oder von Analyse-Tools).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=1.4.8"></script>
+</body>
+</html>
