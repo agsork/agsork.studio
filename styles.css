@@ -1789,6 +1789,24 @@ body.menu-open { overflow: hidden; } /* Seite hinter dem Overlay einfrieren */
   .contact-layout { grid-template-columns: 1fr; }
 }
 
+/* Hero-Mockup: Hinweis „beispielhafte Darstellung" (1.4) */
+.hv-note {
+  margin-top: 2.4rem;
+  text-align: center;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+/* Portfolio: einladender CTA-Block zur Kontaktseite (1.4) */
+.portfolio-cta {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
+}
+.portfolio-cta p { color: var(--c-mid); max-width: 46ch; }
+
 /* ============================================================
    FOOTER
    ============================================================ */
