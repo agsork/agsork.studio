@@ -34,7 +34,7 @@
   <!-- Schriften werden lokal gehostet (DSGVO/DSG Schweiz): @font-face in
        styles.css, Dateien unter /fonts/. Keine Anfrage an Google-Server. -->
 
-  <link rel="stylesheet" href="/styles.css?v=1.4.9" />
+  <link rel="stylesheet" href="/styles.css?v=1.4.10" />
 </head>
 
 <body>
@@ -97,21 +97,65 @@
             <span class="kt-row kt-ghost" data-dir="r" aria-hidden="true">Reden wir.</span>
           </h1>
           <p class="section-lead reveal" style="--i: 1">
-            Erzähl uns von deinem Unternehmen. Wir melden uns mit einer ersten
-            Idee zurück.
+            Erzähl uns von deinem Unternehmen — per Formular, E-Mail, WhatsApp
+            oder Telefon. Wir melden uns mit einer ersten Idee zurück.
           </p>
         </header>
 
-        <div class="contact-grid">
-          <a class="contact-item reveal magnetic" href="mailto:adrian.kux@agsork.studio">
-            <span class="contact-label">E-Mail</span>
-            <span class="contact-value">adrian.kux@agsork.studio</span>
-            <span class="contact-arrow" aria-hidden="true">↗</span>
-          </a>
-        </div>
+        <div class="contact-layout">
+          <!-- Anfrage-Formular. Progressive Enhancement: mit JS wird per
+               fetch() gesendet (kein Redirect, Inline-Status); ohne JS greift
+               der normale POST. Den Platzhalter YOUR_FORM_ENDPOINT durch die
+               echte Formspree-ID (o. ä.) ersetzen, dann ist alles aktiv. -->
+          <form
+            class="contact-form reveal"
+            id="contactForm"
+            action="https://formspree.io/f/YOUR_FORM_ENDPOINT"
+            method="POST"
+          >
+            <div class="form-field">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="form-field">
+              <label for="cf-email">E-Mail</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="form-field">
+              <label for="cf-company">Unternehmen <span class="form-optional">(optional)</span></label>
+              <input id="cf-company" name="company" type="text" autocomplete="organization" />
+            </div>
+            <div class="form-field">
+              <label for="cf-message">Nachricht</label>
+              <textarea id="cf-message" name="message" rows="5" required></textarea>
+            </div>
+            <!-- Spam-Falle: für Menschen unsichtbar, Bots füllen sie aus -->
+            <input class="form-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button class="btn btn-primary btn-lg magnetic" type="submit">Anfrage senden</button>
+            <p class="form-status" id="cf-status" role="status" aria-live="polite"></p>
+            <p class="form-fallback">
+              Lieber direkt? <a href="mailto:adrian.kux@agsork.studio">Schreib uns eine E-Mail</a>.
+            </p>
+          </form>
 
-        <div class="contact-cta reveal">
-          <a class="btn btn-primary btn-lg magnetic" href="mailto:adrian.kux@agsork.studio">Kostenloses Erstgespräch</a>
+          <!-- Direkte Kanäle -->
+          <div class="contact-channels reveal" style="--i: 1">
+            <a class="contact-item magnetic" href="mailto:adrian.kux@agsork.studio">
+              <span class="contact-label">E-Mail</span>
+              <span class="contact-value">adrian.kux@agsork.studio</span>
+              <span class="contact-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a class="contact-item magnetic" href="https://wa.me/41782694229?text=Hallo%20agsork%20studio%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Website%20f%C3%BCr%20%E2%80%A6" target="_blank" rel="noopener">
+              <span class="contact-label">WhatsApp</span>
+              <span class="contact-value">Direkt schreiben</span>
+              <span class="contact-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a class="contact-item magnetic" href="tel:+41782694229">
+              <span class="contact-label">Telefon</span>
+              <span class="contact-value">078 269 42 29</span>
+              <span class="contact-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -250,6 +294,6 @@
     </div>
   </div>
 
-  <script src="/script.js?v=1.4.9"></script>
+  <script src="/script.js?v=1.4.10"></script>
 </body>
 </html>

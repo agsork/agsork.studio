@@ -942,6 +942,78 @@
   })();
 
   /* ==========================================================
+     KONTAKT-FORMULAR (1.4)
+     Progressive Enhancement: mit fetch() wird ohne Redirect gesendet und ein
+     Inline-Status gezeigt; ohne JS greift der native POST (action). Solange
+     der Platzhalter-Endpunkt gesetzt ist, wird nicht gesendet, sondern auf
+     die direkten Kanäle (E-Mail/WhatsApp) verwiesen.
+     ========================================================== */
+  (() => {
+    const form = document.getElementById("contactForm");
+    if (!form) return;
+    const status = document.getElementById("cf-status");
+    const btn = form.querySelector('button[type="submit"]');
+    const endpoint = form.getAttribute("action") || "";
+    const placeholder = endpoint.includes("YOUR_FORM_ENDPOINT");
+
+    const setStatus = (msg, kind) => {
+      if (!status) return;
+      status.textContent = msg;
+      status.className = "form-status" + (kind ? " form-status--" + kind : "");
+    };
+
+    form.addEventListener("submit", (e) => {
+      if (typeof fetch !== "function") return; // sehr alte Browser: nativer POST
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      if (placeholder) {
+        setStatus(
+          "Das Formular wird gerade aufgeschaltet — am schnellsten erreichst du uns per E-Mail oder WhatsApp.",
+          "err"
+        );
+        return;
+      }
+      const orig = btn ? btn.textContent : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Wird gesendet …";
+      }
+      setStatus("", "");
+      fetch(endpoint, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      })
+        .then((res) => {
+          if (res.ok) {
+            form.reset();
+            setStatus("Danke! Deine Anfrage ist angekommen — wir melden uns bald.", "ok");
+          } else {
+            setStatus(
+              "Das hat nicht geklappt. Bitte versuch es erneut oder schreib uns direkt eine E-Mail.",
+              "err"
+            );
+          }
+        })
+        .catch(() => {
+          setStatus(
+            "Netzwerkfehler. Bitte versuch es erneut oder schreib uns direkt eine E-Mail.",
+            "err"
+          );
+        })
+        .finally(() => {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = orig;
+          }
+        });
+    });
+  })();
+
+  /* ==========================================================
      INIT
      ========================================================== */
   function init() {

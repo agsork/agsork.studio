@@ -1726,6 +1726,69 @@ body.menu-open { overflow: hidden; } /* Seite hinter dem Overlay einfrieren */
 .contact-item:hover .contact-arrow { transform: translate(3px, -3px); color: var(--c-dark); }
 .contact-cta { margin-top: clamp(2.5rem, 6vw, 4rem); text-align: center; }
 
+/* ---------- Kontakt: Layout, Kanäle & Anfrage-Formular (1.4) ---------- */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+.contact-channels { display: grid; gap: clamp(0.8rem, 2vw, 1rem); }
+
+.contact-form { display: grid; gap: var(--space-3); }
+.form-field { display: grid; gap: 0.4rem; }
+.form-field label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-mid);
+}
+.form-optional { font-weight: 400; color: var(--c-muted); }
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: var(--fs-body);
+  color: var(--c-dark);
+  background: var(--c-light);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.form-field textarea { resize: vertical; min-height: 8rem; }
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--c-dark);
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+.form-field input:user-invalid,
+.form-field textarea:user-invalid { border-color: #b91c1c; }
+/* Honeypot: für Menschen unsichtbar (nicht display:none) */
+.form-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.contact-form .btn { justify-self: start; }
+.form-status { font-size: 0.95rem; min-height: 1.2em; }
+.form-status--ok { color: #15803d; }
+.form-status--err { color: #b91c1c; }
+.form-fallback { font-size: var(--fs-small); color: var(--c-muted); }
+.form-fallback a {
+  color: var(--c-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .contact-layout { grid-template-columns: 1fr; }
+}
+
 /* ============================================================
    FOOTER
    ============================================================ */
