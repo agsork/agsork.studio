@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Seite nicht gefunden | agsork studio</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta
+    name="description"
+    content="agsork studio baut visuell starke Websites für Unternehmen in Weinfelden und Umgebung — von Design bis Social Media."
+  />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://agsork.studio/" />
+  <meta property="og:title" content="agsork studio — Sichtbar werden im Thurgau" />
+  <meta property="og:description" content="agsork studio baut visuell starke Websites für Unternehmen in Weinfelden und Umgebung — von Design bis Social Media." />
+  <meta property="og:locale" content="de_CH" />
+  <meta property="og:site_name" content="agsork studio" />
+  <meta property="og:image" content="https://agsork.studio/og-image.jpg" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@AgsorkStudio" />
+  <meta name="twitter:image" content="https://agsork.studio/og-image.jpg" />
+  <meta name="twitter:title" content="agsork studio — Sichtbar werden im Thurgau" />
+  <meta name="twitter:description" content="agsork studio baut visuell starke Websites für Unternehmen in Weinfelden und Umgebung — von Design bis Social Media." />
+
+  <link rel="canonical" href="https://agsork.studio/" />
+
+  <!-- Favicon: Original-Logo (PNG) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+
+  <!-- Schriften werden lokal gehostet (DSGVO/DSG Schweiz): @font-face in
+       styles.css, Dateien unter /fonts/. Keine Anfrage an Google-Server. -->
+
+  <link rel="stylesheet" href="/styles.css?v=1.4.11" />
+
+  <style>
+    .notfound { min-height: 58vh; display: grid; place-items: center; text-align: center; }
+    .notfound .eyebrow { justify-content: center; }
+    .notfound h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--c-dark);
+      margin: 0.4em 0 0.35em;
+    }
+    .notfound p { color: var(--c-mid); max-width: 46ch; margin-inline: auto; }
+    .notfound-actions {
+      margin-top: var(--space-4);
+      display: flex;
+      gap: var(--space-2);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Skip-Link für Tastatur-/Screenreader-Nutzung -->
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <!-- ============================================================
+       KOPFZEILE / NAVIGATION
+       Die volle Leiste minimiert sich beim Scrollen in die
+       Liquid-Glass-Pille (.glass-dock); Refraktion via SVG-Filter
+       (script.js, GlassDock), Fallback: Frosted Glass.
+       ============================================================ -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-shell">
+      <div class="glass-dock" id="glassDock">
+        <a class="wordmark" href="/" aria-label="agsork studio – Startseite">
+          agsork<span class="wordmark-dot">.</span>studio
+        </a>
+
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-expanded="false"
+          aria-controls="menuOverlay"
+          aria-haspopup="true"
+          aria-label="Menü öffnen"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       NAVIGATIONS-OVERLAY — MENÜ-LISTE
+       Der Drei-Strich-Button fasst die vier Ziele zusammen und öffnet
+       dieses Vollflächen-Overlay: die Ziele erscheinen als klare, grosse
+       Liste (Mechanik in script.js → NavMenu). Jedes Ziel ist eine
+       eigene Seite.
+       ============================================================ -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <nav class="option-wheel" id="navWheel" aria-label="Hauptnavigation">
+      <a class="option-wheel__item" href="/angebot/">Angebot</a>
+      <a class="option-wheel__item" href="/pricing/">Pricing</a>
+      <a class="option-wheel__item" href="/portfolio/">Portfolio</a>
+      <a class="option-wheel__item" href="/kontakt/">Kontakt</a>
+    </nav>
+  </div>
+
+  <main id="main">
+    <section class="section notfound">
+      <div class="container">
+        <p class="eyebrow">Fehler 404</p>
+        <h1>Diese Seite gibt es nicht.</h1>
+        <p>
+          Vielleicht wurde sie verschoben oder der Link stimmt nicht ganz.
+          Kein Problem — hier geht's weiter:
+        </p>
+        <div class="notfound-actions">
+          <a class="btn btn-primary magnetic" href="/">Zur Startseite</a>
+          <a class="btn btn-ghost magnetic" href="/kontakt/">Kontakt aufnehmen</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-mark">agsork.studio</span>
+      <nav class="footer-legal" aria-label="Rechtliches">
+        <button
+          class="footer-legal-link"
+          type="button"
+          data-modal-open="modalImpressum"
+          aria-haspopup="dialog"
+          aria-controls="modalImpressum"
+        >Impressum</button>
+        <button
+          class="footer-legal-link"
+          type="button"
+          data-modal-open="modalDatenschutz"
+          aria-haspopup="dialog"
+          aria-controls="modalDatenschutz"
+        >Datenschutz</button>
+      </nav>
+      <span class="footer-year" id="footerYear">© 2026 agsork studio</span>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       RECHTLICHES — MODALS (Impressum / Datenschutz)
+       ============================================================ -->
+  <div
+    class="modal"
+    id="modalImpressum"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalImpressumTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card" tabindex="-1">
+      <header class="modal-head">
+        <h2 class="modal-title" id="modalImpressumTitle">Impressum</h2>
+        <button class="modal-close" type="button" data-modal-close aria-label="Dialog schliessen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>
+          Adrian Kux<br />
+          Ottenbergstrasse 26<br />
+          8572 Berg, Schweiz
+        </p>
+        <p>
+          E-Mail: <a href="mailto:adrian.kux@agsork.studio">adrian.kux@agsork.studio</a><br />
+          Telefon: <a href="tel:+41782694229">078 269 42 29</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal"
+    id="modalDatenschutz"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalDatenschutzTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card" tabindex="-1">
+      <header class="modal-head">
+        <h2 class="modal-title" id="modalDatenschutzTitle">Datenschutzerklärung</h2>
+        <button class="modal-close" type="button" data-modal-close aria-label="Dialog schliessen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </header>
+      <div class="modal-body">
+        <h3>Verantwortliche Person</h3>
+        <p>
+          Adrian Kux<br />
+          Ottenbergstrasse 26<br />
+          8572 Berg, Schweiz<br />
+          E-Mail: <a href="mailto:adrian.kux@agsork.studio">adrian.kux@agsork.studio</a>
+        </p>
+        <p>
+          Diese Datenschutzerklärung informiert dich darüber, welche
+          Personendaten beim Besuch von agsork.studio bearbeitet werden.
+        </p>
+        <h3>Hosting und technische Bereitstellung</h3>
+        <p>
+          Diese Website wird über GitHub Pages gehostet und über Cloudflare
+          als Content-Delivery-Netzwerk ausgeliefert. Dabei werden automatisch
+          technische Daten wie deine IP-Adresse, Browsertyp und
+          Zugriffszeitpunkt in Server-Logs verarbeitet. Beide Anbieter haben
+          Serverstandorte auch in den USA; eine Datenübermittlung ins Ausland
+          ist damit möglich.
+        </p>
+        <h3>Schriften</h3>
+        <p>
+          Die verwendeten Schriften werden lokal von diesem Server
+          ausgeliefert. Es werden dabei keine Personendaten an Dritte
+          (insbesondere nicht an Google) übermittelt.
+        </p>
+        <h3>Kontaktaufnahme per E-Mail</h3>
+        <p>
+          Wenn du uns über die auf der Website angegebene E-Mail-Adresse
+          kontaktierst, werden die von dir mitgeteilten Daten (z. B. Name,
+          E-Mail-Adresse, Inhalt deiner Nachricht) zur Bearbeitung deiner
+          Anfrage verwendet. Eingehende E-Mails an adrian.kux@agsork.studio
+          werden über Cloudflare Email Routing an ein Gmail-Postfach
+          (Google LLC, USA) weitergeleitet.
+        </p>
+        <h3>Cookies</h3>
+        <p>Diese Website selbst setzt keine eigenen Cookies.</p>
+        <h3>Deine Rechte</h3>
+        <p>
+          Du hast das Recht, Auskunft über deine bei uns bearbeiteten
+          Personendaten zu verlangen sowie deren Berichtigung oder Löschung
+          zu beantragen. Wende dich dazu an die oben genannte Kontaktadresse.
+        </p>
+        <h3>Änderungen</h3>
+        <p>
+          Wir behalten uns vor, diese Datenschutzerklärung anzupassen, sobald
+          sich die Datenbearbeitung auf dieser Website ändert (z. B. bei
+          Einführung eines Kontaktformulars oder von Analyse-Tools).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=1.4.11"></script>
+</body>
+</html>
