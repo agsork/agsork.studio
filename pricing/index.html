@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing — agsork studio</title>
+  <title>Pricing — Websites & Social Media im Thurgau | agsork studio</title>
   <meta
     name="description"
-    content="Klare, ehrliche Preise: Website ab CHF 1'499 einmalig plus Hosting &amp; Wartung, Social Media ab CHF 249 pro Monat. Keine versteckten Kosten."
+    content="Klare, ehrliche Preise für Websites im Thurgau: Website ab CHF 1'499 einmalig plus Hosting &amp; Wartung, Social Media ab CHF 249 pro Monat. Keine versteckten Kosten."
   />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://agsork.studio/pricing/" />
-  <meta property="og:title" content="Pricing — agsork studio" />
-  <meta property="og:description" content="Klare, ehrliche Preise: Website ab CHF 1'499 einmalig plus Hosting &amp; Wartung, Social Media ab CHF 249 pro Monat. Keine versteckten Kosten." />
+  <meta property="og:title" content="Pricing — Websites & Social Media im Thurgau | agsork studio" />
+  <meta property="og:description" content="Klare, ehrliche Preise für Websites im Thurgau: Website ab CHF 1'499 einmalig plus Hosting &amp; Wartung, Social Media ab CHF 249 pro Monat. Keine versteckten Kosten." />
   <meta property="og:locale" content="de_CH" />
   <meta property="og:site_name" content="agsork studio" />
   <meta property="og:image" content="https://agsork.studio/og-image.jpg" />
@@ -22,8 +22,8 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@AgsorkStudio" />
   <meta name="twitter:image" content="https://agsork.studio/og-image.jpg" />
-  <meta name="twitter:title" content="Pricing — agsork studio" />
-  <meta name="twitter:description" content="Klare, ehrliche Preise: Website ab CHF 1'499 einmalig plus Hosting &amp; Wartung, Social Media ab CHF 249 pro Monat. Keine versteckten Kosten." />
+  <meta name="twitter:title" content="Pricing — Websites & Social Media im Thurgau | agsork studio" />
+  <meta name="twitter:description" content="Klare, ehrliche Preise für Websites im Thurgau: Website ab CHF 1'499 einmalig plus Hosting &amp; Wartung, Social Media ab CHF 249 pro Monat. Keine versteckten Kosten." />
 
   <link rel="canonical" href="https://agsork.studio/pricing/" />
 
@@ -35,6 +35,35 @@
        styles.css, Dateien unter /fonts/. Keine Anfrage an Google-Server. -->
 
   <link rel="stylesheet" href="/styles.css?v=1.4.11" />
+
+  <!-- Structured Data: Leistungen mit Preisen (P2-8) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Webdesign & Social Media Management",
+    "provider": {
+      "@type": "ProfessionalService",
+      "name": "agsork studio",
+      "url": "https://agsork.studio/"
+    },
+    "areaServed": { "@type": "AdministrativeArea", "name": "Thurgau" },
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Website — Design, Umsetzung, Hosting & Wartung",
+        "priceSpecification": { "@type": "PriceSpecification", "price": 1499, "priceCurrency": "CHF" },
+        "description": "Einmalig CHF 1499, danach CHF 14.99 pro Monat für Hosting und Wartung."
+      },
+      {
+        "@type": "Offer",
+        "name": "Social Media Management",
+        "priceSpecification": { "@type": "UnitPriceSpecification", "price": 249, "priceCurrency": "CHF", "unitText": "Monat" },
+        "description": "Betreuung von Instagram und Facebook, ein Beitrag pro Woche."
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
