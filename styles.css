@@ -2,9 +2,27 @@
    agsork studio — styles.css
    Design-System: 4 neutrale Basisfarben + 1 Amber-Akzent, der
    ausschliesslich „live/aktueller Status" bedeutet (nie CTAs).
-   Fonts: Inter (Body) · Silkscreen (Brand/Kicker) ·
-   JetBrains Mono (Zahlen/Meta) · Syne (Display-Headlines).
+   Fonts: 2 Familien, LOKAL gehostet (DSGVO/DSG) — Inter (Body/UI),
+   Syne (Display-Headlines & Wordmark). Zahlen/Meta: System-Mono.
    ============================================================ */
+
+/* ---------- Schriften: lokal gehostet (Variable Fonts, /fonts/) ----------
+   Kein Google-Fonts-Request mehr. Inter deckt 300–800 in EINER Datei ab,
+   Syne 700–800 — zusammen ~83 KB. font-display: swap → sofort lesbar. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url("/fonts/Inter-Variable.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Syne";
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url("/fonts/Syne-Variable.woff2") format("woff2");
+}
 
 /* ---------- Design-Tokens ---------- */
 :root {
@@ -27,8 +45,11 @@
 
   /* Typo — vier Familien mit klar begrenzten Rollen (Aufgabe 2) */
   --font-body: "Inter", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-brand: "Silkscreen", monospace;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Brand/Kicker war Silkscreen → jetzt Inter (2-Font-Setup). Die
+     Wordmark nutzt separat Syne (--font-display), siehe .wordmark. */
+  --font-brand: var(--font-body);
+  /* Zahlen/Meta war JetBrains Mono → System-Mono (kein Webfont). */
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
   --font-display: "Syne", sans-serif;
   --fs-hero: clamp(2.75rem, 8.5vw, 6.25rem);
   --fs-h2: clamp(2.1rem, 5.5vw, 4rem);
@@ -137,6 +158,24 @@ img, svg, canvas { display: block; max-width: 100%; }
   padding-block: var(--section-pad);
 }
 
+/* Unterseiten (1.4): ist ein Abschnitt das erste Element im <main>, liegt er
+   direkt unter der fixen Kopfzeile → zusätzlicher oberer Abstand, damit die
+   Eyebrow/Headline nicht an der Leiste klebt. Auf der Startseite ist das
+   erste Element der Hero (nicht .section) → hier nicht betroffen. */
+main > .section:first-child {
+  padding-top: calc(var(--header-h) + clamp(2.25rem, 5vw, 4rem));
+}
+
+/* Sticky-Footer: kurze Seiten (z. B. Kontakt) sollen den Footer trotzdem
+   an den unteren Rand schieben statt Leerraum darunter zu lassen. */
+body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1 0 auto; }
+.site-footer { flex-shrink: 0; }
+
 /* Abgesetzte Sektionen: KEIN eigener Grauton mehr — Rhythmus/Trennung
    ausschliesslich über Haarlinien-Borders (Aufgabe 1) */
 .pricing { border-block: 1px solid var(--c-border); }
@@ -194,7 +233,11 @@ img, svg, canvas { display: block; max-width: 100%; }
 .btn-text:hover::after { width: calc(100% - 0.4rem); }
 
 /* ============================================================
-   KOPFZEILE
+   KOPFZEILE — GLASS DOCK
+   Volle, transparente Leiste am Seitenanfang; beim Scrollen
+   minimiert sie sich in eine schwebende Liquid-Glass-Pille.
+   Die Refraktion (backdrop-filter: url(#glassDockFilter)) baut
+   script.js (GlassDock) — hier liegen Morph & Fallback-Optik.
    ============================================================ */
 .site-header {
   position: fixed;
@@ -203,62 +246,120 @@ img, svg, canvas { display: block; max-width: 100%; }
   height: var(--header-h);
   display: flex;
   align-items: center;
-  transition: background 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
-}
-.site-header.scrolled {
-  height: 56px;
-  background: rgba(245, 245, 245, 0.85);
-  backdrop-filter: saturate(180%) blur(14px);
-  -webkit-backdrop-filter: saturate(180%) blur(14px);
-  box-shadow: 0 1px 0 var(--c-border);
+  /* nur die Pille selbst fängt Klicks — die Flächen daneben
+     bleiben durchklickbar, sobald die Leiste minimiert ist */
+  pointer-events: none;
 }
 
-.nav-bar {
+.nav-shell { display: flex; }
+
+.glass-dock {
+  pointer-events: auto;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 0.45rem 0;
+  border-radius: 100px;
+  background: transparent;
+  transition:
+    max-width 0.65s var(--ease-out),
+    padding 0.65s var(--ease-out),
+    background 0.45s ease,
+    box-shadow 0.45s ease;
 }
 
-/* Kopfzeile: Wordmark komplett in Silkscreen (Aufgabe 2/3) */
+/* minimierter Zustand: schwebende Pille, mittig */
+.site-header.is-condensed .glass-dock {
+  max-width: 680px;
+  padding: 0.6rem 1.6rem;
+}
+
+/* --- Glas-Optik der Pille (script.js setzt genau EINE Klasse) ---
+   Standard: klares Liquid-Glass bei 5px — durchgehend, kein Umschalten
+   beim Scrollen (siehe .glass-frost unten).
+   1) .glass-frost — Standard überall: klares Glas, blur(5px)
+   2) .glass-solid — ohne backdrop-filter: halbdeckende Fläche
+   3) .glass-svg   — NUR wenn CFG.refraction=true (script.js): echte
+                     SVG-Refraktion mit chromatischer Aberration. Sieht
+                     im Stand edel aus, ruckelt/glitcht aber beim Scrollen
+                     → standardmässig AUS. */
+.site-header.is-condensed .glass-dock.glass-svg {
+  /* wie das reactbits-Original: backgroundOpacity 0, saturation 1 —
+     reine Refraktion ohne Milch-Schleier */
+  background: transparent;
+  -webkit-backdrop-filter: url(#glassDockFilter) saturate(1);
+  backdrop-filter: url(#glassDockFilter) saturate(1);
+  box-shadow:
+    0 0 2px 1px color-mix(in oklch, black, transparent 85%) inset,
+    0 0 10px 4px color-mix(in oklch, black, transparent 90%) inset,
+    0 4px 16px rgba(17, 17, 26, 0.05),
+    0 8px 24px rgba(17, 17, 26, 0.05),
+    0 16px 56px rgba(17, 17, 26, 0.05),
+    0 4px 16px rgba(17, 17, 26, 0.05) inset,
+    0 8px 24px rgba(17, 17, 26, 0.05) inset,
+    0 16px 56px rgba(17, 17, 26, 0.05) inset;
+}
+/* Scroll-Degrade (script.js): während des Scrollens rendert die Pille
+   mit einem günstigen, fast klaren Glas (nur Hauch von Blur — bewusst
+   KEIN Milchglas) — der SVG-Filter müsste sonst jeden Frame den
+   kompletten Backdrop neu rastern (Software-Pfad, ruckelt). Nach
+   ~150ms Ruhe kehrt die echte Refraktion zurück. */
+.site-header.is-condensed .glass-dock.glass-svg.is-scrolling {
+  -webkit-backdrop-filter: blur(5px) saturate(1.2);
+  backdrop-filter: blur(5px) saturate(1.2);
+}
+/* Standard-Look: klares, durchgehendes Glas bei 5px (kein Milchglas,
+   kein Umschalten). Sehr leichte weisse Grundfläche für Definition, ein
+   feiner Innen-Highlight oben + dezenter Schlagschatten für die "schwebt"-
+   Optik. */
+.site-header.is-condensed .glass-dock.glass-frost {
+  background: hsl(0 0% 100% / 0.14);
+  -webkit-backdrop-filter: blur(5px) saturate(1.2);
+  backdrop-filter: blur(5px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    0 8px 30px rgba(17, 17, 26, 0.10),
+    0 2px 12px rgba(17, 17, 26, 0.06);
+}
+.site-header.is-condensed .glass-dock.glass-solid {
+  background: rgba(245, 245, 245, 0.92);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px var(--c-border);
+}
+
+/* in der Pille rücken die Links etwas zusammen */
+/* unsichtbares SVG mit der Filter-Definition (script.js hängt es an
+   den body). display:none würde den Filter in Chromium deaktivieren. */
+.glass-defs {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Kopfzeile: Wordmark in Syne (distinktive Marken-Schrift) */
 .wordmark {
-  font-family: var(--font-brand);
-  font-weight: 700;
-  font-size: 0.88rem;
-  letter-spacing: 0;
+  font-family: var(--font-display); /* Syne — distinktive Marken-Schrift */
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
   color: var(--c-dark);
   transition: color 0.4s ease;
 }
 /* Punkt übernimmt die normale Wordmark-Farbe — bewusst KEIN Akzent (Aufgabe 1/3) */
 .wordmark-dot { margin-inline: 1px; }
 
-.nav {
-  display: flex;
-  gap: clamp(1.2rem, 2.5vw, 2.4rem);
-}
-.nav a {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--c-mid);
-  position: relative;
-  padding: 0.3rem 0;
-  transition: color 0.25s ease;
-}
-.nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 0;
-  height: 1.5px;
-  background: var(--c-dark);
-  transition: width 0.35s var(--ease-out);
-}
-.nav a:hover { color: var(--c-dark); }
-.nav a:hover::after { width: 100%; }
-
+/* Drei-Strich-Button — jetzt auf ALLEN Breiten sichtbar. Er fasst die
+   vier Nav-Ziele zusammen; geöffnet zeigt sie das Option-Wheel-Overlay. */
 .nav-toggle {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 5px;
   width: 40px;
@@ -268,6 +369,7 @@ img, svg, canvas { display: block; max-width: 100%; }
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 2;
 }
 .nav-toggle span {
   display: block;
@@ -278,10 +380,112 @@ img, svg, canvas { display: block; max-width: 100%; }
   transition: transform 0.35s var(--ease-out), opacity 0.25s ease,
     background 0.4s ease;
 }
-/* Bei offenem Mobile-Menü liegt die Kopfzeile über dem weissen Panel → dunkel */
-.site-header.nav-open .wordmark { color: var(--c-dark); }
-.site-header.nav-open .wordmark-dot { color: var(--c-muted); }
-.site-header.nav-open .nav-toggle span { background: var(--c-dark); }
+
+/* Menü offen: dunkles Overlay dahinter → Wortmarke + Button hell, damit
+   sie lesbar bleiben; die drei Striche klappen zum × zusammen. */
+.site-header.nav-open .wordmark,
+.site-header.nav-open .wordmark-dot { color: var(--c-light); }
+.site-header.nav-open .nav-toggle span { background: var(--c-light); }
+.site-header.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.site-header.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+.site-header.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Menü offen: die Glas-Pille tritt zurück (transparent, kein Filter),
+   damit sie auf dem dunklen Overlay nicht als heller Kasten stört.
+   (!important gewinnt gegen die spezifischeren .glass-*-Regeln.) */
+.site-header.nav-open .glass-dock {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   NAVIGATIONS-OVERLAY + MENÜ-LISTE (1.4)
+   Der Drei-Strich-Button öffnet ein dunkles Vollflächen-Overlay; die
+   vier Ziele erscheinen als klare, grosse Liste (Mechanik: script.js
+   → NavMenu). Kein Rad, keine Scroll-Physik — schnell & barrierefrei.
+   ============================================================ */
+body.menu-open { overflow: hidden; } /* Seite hinter dem Overlay einfrieren */
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95; /* unter Header (100) → Drei-Strich-Button bleibt oben klickbar */
+  display: grid;
+  place-items: center;
+  /* dunkler Grund mit dezenter Vignette Richtung Menü (oben rechts) */
+  background:
+    radial-gradient(120% 90% at 82% 22%, rgba(31, 41, 55, 0.85), transparent 58%),
+    rgba(17, 24, 39, 0.97);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  visibility: hidden;
+  opacity: 0;
+  /* visibility springt erst NACH dem Ausblenden (wie bei den Modals) */
+  transition: opacity 0.5s var(--ease-out), visibility 0s linear 0.5s;
+}
+.menu-overlay.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.5s var(--ease-out);
+}
+
+/* Das Rad füllt das Overlay; die Items sind absolut positioniert und
+   werden von JS (NavWheel) pro Frame transformiert. */
+/* Menü-Liste: grosse Ziele, mittig gestapelt. Grosszügige Hitboxen
+   (padding), deutliche Hover-/Fokus-Zustände, aktuelle Seite markiert.
+   (Klassennamen .option-wheel* aus Kompatibilität beibehalten — es ist
+   jetzt eine schlichte Liste, kein Rad.) */
+.option-wheel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.25rem, 1.2vh, 0.9rem);
+  width: 100%;
+  height: 100%;
+  padding: var(--gutter);
+}
+.option-wheel__item {
+  display: block;
+  padding: clamp(0.5rem, 1.5vh, 1rem) clamp(1rem, 4vw, 2rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 7vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: #9aa0aa; /* gedämpft auf dunklem Grund */
+  border-radius: 12px;
+  transition: color 0.25s ease, transform 0.35s var(--ease-out);
+}
+.option-wheel__item:hover,
+.option-wheel__item:focus-visible {
+  color: #ffffff;
+  transform: translateX(6px);
+}
+.option-wheel__item:focus-visible {
+  outline: 2px solid var(--c-light);
+  outline-offset: 6px;
+}
+/* aktuelle Seite: hell + Amber-Punkt-Marker */
+.option-wheel__item[aria-current="page"] { color: #ffffff; }
+.option-wheel__item[aria-current="page"]::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.65rem;
+  border-radius: 50%;
+  background: var(--c-warm);
+  vertical-align: middle;
+}
+@media (prefers-reduced-motion: reduce) {
+  .option-wheel__item { transition: color 0.2s ease; }
+  .option-wheel__item:hover,
+  .option-wheel__item:focus-visible { transform: none; }
+}
 
 /* ============================================================
    3 — HERO
@@ -582,7 +786,7 @@ img, svg, canvas { display: block; max-width: 100%; }
   font-family: var(--font-brand);
   font-size: 0.72rem;
   font-weight: 400;
-  letter-spacing: 0.06em; /* Silkscreen läuft breit — weniger Sperrung */
+  letter-spacing: 0.1em; /* Inter-Label: etwas Sperrung für den Kicker-Look */
   text-transform: uppercase;
   color: var(--c-muted);
 }
@@ -601,11 +805,9 @@ img, svg, canvas { display: block; max-width: 100%; }
 
 /* ---------- Typo-Rollen (Aufgabe 2) ---------- */
 /* Display-Font Syne — AUSSCHLIESSLICH diese Klassen, bewusst KEINE
-   pauschale h1–h4-Regel. (.hv-title, .sd-headline, .hd-title und alle
-   Karten-h3/h4 bleiben Inter.) */
+   pauschale h1–h4-Regel. (.hv-title und alle Karten-h3/h4 bleiben Inter.) */
 .hero-title,
 .kinetic-title,
-.play-title,
 .social-title,
 .price-promise {
   font-family: var(--font-display);
@@ -688,7 +890,7 @@ img, svg, canvas { display: block; max-width: 100%; }
   transition: background 0.4s ease, transform 0.4s var(--ease-back);
 }
 .ws-step.is-active::before { background: var(--c-warm); transform: scale(1.5); }
-.ws-step h3 { font-size: var(--fs-h3); margin-bottom: 0.3rem; }
+.ws-step h2 { font-size: var(--fs-h3); margin-bottom: 0.3rem; }
 .ws-step p { color: var(--c-mid); max-width: 38ch; }
 
 /* Visualspalte */
@@ -931,212 +1133,6 @@ img, svg, canvas { display: block; max-width: 100%; }
 }
 
 /* ============================================================
-   PLAYGROUNDS
-   ============================================================ */
-.play-head { margin-top: clamp(3rem, 8vw, 6rem); margin-bottom: var(--space-5); }
-.play-title { font-size: var(--fs-h2); font-weight: 800; letter-spacing: -0.03em; }
-.play-lead { margin-top: 0.6rem; font-size: var(--fs-lead); color: var(--c-mid); }
-
-.play-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-}
-.play-card {
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius);
-  padding: clamp(1.5rem, 3vw, 2.2rem);
-  background: var(--c-light);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  box-shadow: var(--shadow-md);
-  transition: transform 0.55s var(--ease-out), box-shadow 0.55s var(--ease-out);
-}
-.play-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.play-tag {
-  display: inline-block;
-  font-family: var(--font-brand);
-  font-size: 0.66rem;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--c-muted);
-  margin-bottom: 0.6rem;
-}
-.play-card-head h4 { font-size: var(--fs-h4); margin-bottom: 0.4rem; }
-.play-card-head p { color: var(--c-mid); font-size: 0.98rem; }
-
-/* --- Playground 1: Stil-Umschalter --- */
-.style-demo {
-  border-radius: 12px;
-  background: var(--c-light);
-  border: 1px solid var(--c-border);
-  padding: clamp(1.5rem, 4vw, 2.4rem);
-  min-height: 220px;
-  display: grid;
-  place-items: center;
-  transition: background 0.5s var(--ease-out), border-radius 0.5s var(--ease-back),
-    padding 0.5s var(--ease-out);
-}
-.sd-card {
-  width: 100%;
-  display: grid;
-  gap: 0.7rem;
-  transition: all 0.5s var(--ease-overshoot);
-}
-.sd-label {
-  font-size: var(--fs-small);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--c-muted);
-}
-.sd-headline {
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 700;
-  color: var(--c-dark);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  transition: all 0.5s var(--ease-overshoot);
-}
-.sd-body { color: var(--c-mid); font-size: 0.95rem; }
-.sd-cta {
-  justify-self: start;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--c-dark);
-  border-bottom: 1.5px solid var(--c-dark);
-  padding-bottom: 2px;
-  transition: all 0.5s var(--ease-back);
-}
-
-/* Stil A: elegant */
-.style-elegant .sd-headline { font-weight: 300; letter-spacing: 0.01em; }
-.style-elegant .sd-label { letter-spacing: 0.3em; }
-
-/* Stil B: verspielt */
-.style-verspielt { border-radius: 26px; background: #ececec; }
-.style-verspielt .sd-card { transform: rotate(-1.4deg); }
-.style-verspielt .sd-headline { font-weight: 800; letter-spacing: -0.04em; }
-.style-verspielt .sd-cta {
-  border: none;
-  background: var(--c-dark);
-  color: var(--c-light);
-  padding: 0.5rem 1rem;
-  border-radius: 100px;
-}
-
-/* Stil C: minimal */
-.style-minimal { background: #fff; border-color: transparent; padding: 1rem; }
-.style-minimal .sd-headline { font-weight: 500; }
-.style-minimal .sd-label, .style-minimal .sd-body { color: var(--c-muted); }
-.style-minimal .sd-cta { border-color: var(--c-border); color: var(--c-mid); }
-
-.style-switch {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid var(--c-border);
-  border-radius: 100px;
-  align-self: flex-start;
-}
-.ss-btn {
-  border: none;
-  background: transparent;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--c-muted);
-  padding: 0.45rem 1rem;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: color 0.3s ease, background 0.4s var(--ease-back);
-}
-.ss-btn.is-active { background: var(--c-dark); color: var(--c-light); }
-
-/* --- Playground 2: Hover-/Cursor-Reveal --- */
-.hover-demo { --mx: 0.5; --my: 0.5; cursor: crosshair; }
-.hd-browser {
-  border: 1px solid var(--c-border);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--c-light);
-  box-shadow: var(--shadow-md);
-}
-.hd-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--c-border);
-  background: var(--c-light);
-}
-.hd-bar > span { width: 9px; height: 9px; border-radius: 50%; background: var(--c-border); }
-.hd-url {
-  margin-left: 10px;
-  font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--c-muted);
-}
-.hd-canvas {
-  position: relative;
-  padding: clamp(1.6rem, 4vw, 2.6rem);
-  min-height: 200px;
-  overflow: hidden;
-}
-.hd-spot {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    220px 220px at calc(var(--mx) * 100%) calc(var(--my) * 100%),
-    rgba(10, 10, 10, 0.06),
-    transparent 70%
-  );
-  transition: background 0.12s linear;
-}
-.hd-eyebrow {
-  font-size: var(--fs-small);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--c-muted);
-  transform: translateX(calc((var(--mx) - 0.5) * 14px));
-  transition: transform 0.25s var(--ease-out);
-}
-.hd-title {
-  font-size: clamp(1.8rem, 5vw, 2.6rem);
-  font-weight: 800;
-  color: var(--c-dark);
-  line-height: 1.04;
-  letter-spacing: calc(-0.04em + (var(--mx) * 0.04em));
-  margin-top: 0.4rem;
-  transition: letter-spacing 0.2s linear;
-}
-.hd-accent {
-  display: block;
-  height: 3px;
-  width: clamp(50px, calc(var(--mx) * 220px), 220px);
-  background: var(--c-dark);
-  margin: 1rem 0;
-  transition: width 0.18s linear;
-}
-.hd-rows { display: grid; gap: 0.5rem; }
-.hd-rows span {
-  height: 8px;
-  border-radius: 5px;
-  background: var(--c-border);
-}
-.hd-rows span:nth-child(1) { width: calc(40% + var(--my) * 40%); }
-.hd-rows span:nth-child(2) { width: calc(70% - var(--mx) * 25%); }
-.hd-rows span:nth-child(3) { width: calc(30% + var(--mx) * 30%); }
-.hd-hint {
-  margin-top: 0.9rem;
-  font-size: var(--fs-small);
-  color: var(--c-muted);
-}
-
-/* ============================================================
    4.2 — SOCIAL (Angebot B) — heller Premium-Panel + Beitrags-Mockup
    ============================================================ */
 .social { margin-top: clamp(3.5rem, 8vw, 6rem); }
@@ -1358,7 +1354,7 @@ img, svg, canvas { display: block; max-width: 100%; }
   justify-content: space-between;
   margin-bottom: 0.6rem;
 }
-.price-card-head h3 { font-size: var(--fs-h3); }
+.price-card-head h2 { font-size: var(--fs-h3); }
 .price-tag {
   font-family: var(--font-brand);
   font-size: 0.66rem;
@@ -1730,6 +1726,87 @@ img, svg, canvas { display: block; max-width: 100%; }
 .contact-item:hover .contact-arrow { transform: translate(3px, -3px); color: var(--c-dark); }
 .contact-cta { margin-top: clamp(2.5rem, 6vw, 4rem); text-align: center; }
 
+/* ---------- Kontakt: Layout, Kanäle & Anfrage-Formular (1.4) ---------- */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+.contact-channels { display: grid; gap: clamp(0.8rem, 2vw, 1rem); }
+
+.contact-form { display: grid; gap: var(--space-3); }
+.form-field { display: grid; gap: 0.4rem; }
+.form-field label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-mid);
+}
+.form-optional { font-weight: 400; color: var(--c-muted); }
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: var(--fs-body);
+  color: var(--c-dark);
+  background: var(--c-light);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.form-field textarea { resize: vertical; min-height: 8rem; }
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--c-dark);
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+.form-field input:user-invalid,
+.form-field textarea:user-invalid { border-color: #b91c1c; }
+/* Honeypot: für Menschen unsichtbar (nicht display:none) */
+.form-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.contact-form .btn { justify-self: start; }
+.form-status { font-size: 0.95rem; min-height: 1.2em; }
+.form-status--ok { color: #15803d; }
+.form-status--err { color: #b91c1c; }
+.form-fallback { font-size: var(--fs-small); color: var(--c-muted); }
+.form-fallback a {
+  color: var(--c-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .contact-layout { grid-template-columns: 1fr; }
+}
+
+/* Hero-Mockup: Hinweis „beispielhafte Darstellung" (1.4) */
+.hv-note {
+  margin-top: 2.4rem;
+  text-align: center;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+/* Portfolio: einladender CTA-Block zur Kontaktseite (1.4) */
+.portfolio-cta {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
+}
+.portfolio-cta p { color: var(--c-mid); max-width: 46ch; }
+
 /* ============================================================
    FOOTER
    ============================================================ */
@@ -1956,7 +2033,6 @@ body.modal-open { overflow: hidden; } /* Seite hinter dem Dialog einfrieren */
    RESPONSIVE
    ============================================================ */
 @media (max-width: 900px) {
-  .play-grid,
   .price-grid { grid-template-columns: 1fr; }
 
   /* Hero stapelt: Text zuerst (Headline-First), Visual darunter */
@@ -2023,34 +2099,12 @@ body.modal-open { overflow: hidden; } /* Seite hinter dem Dialog einfrieren */
      Maus-Hinweis (es gibt keine Maus) */
   .hero-scroll { display: none; }
   .kt-ghost { display: none; }
-  .hd-hint { display: none; }
 
-  .nav-toggle { display: flex; z-index: 20; }
-  .nav {
-    position: fixed;
-    inset: 0 0 0 auto;
-    width: min(78vw, 320px);
-    flex-direction: column;
-    justify-content: center;
-    gap: var(--space-4);
-    padding: var(--gutter);
-    background: var(--c-light);
-    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.08);
-    transform: translateX(100%);
-    transition: transform 0.5s var(--ease-overshoot);
+  /* minimierte Pille auf Mobile: volle Container-Breite, kompakter */
+  .site-header.is-condensed .glass-dock {
+    max-width: 100%;
+    padding: 0.35rem 0.5rem 0.35rem 1.1rem;
   }
-  .nav a { font-size: 1.4rem; font-weight: 600; color: var(--c-dark); }
-  .site-header.nav-open .nav { transform: translateX(0); }
-  /* Bugfix: der backdrop-filter des gescrollten Headers macht ihn zum
-     Containing-Block für position:fixed → das Menü würde sonst am 56px-Header
-     kleben statt am Viewport. Beim Öffnen Filter aus → Panel wieder voll hoch. */
-  .site-header.nav-open {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .site-header.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .site-header.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
-  .site-header.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   .tile-grid { grid-template-columns: repeat(2, 1fr); }
   .tile--wide { grid-column: span 2; }
@@ -2062,7 +2116,6 @@ body.modal-open { overflow: hidden; } /* Seite hinter dem Dialog einfrieren */
   .hero-actions .btn { width: 100%; }
   .tile-grid { grid-template-columns: 1fr; }
   .tile, .tile--wide { aspect-ratio: 5 / 3; grid-column: auto; }
-  .style-switch { width: 100%; justify-content: space-between; }
 }
 
 /* ============================================================
@@ -2103,4 +2156,20 @@ body.modal-open { overflow: hidden; } /* Seite hinter dem Dialog einfrieren */
     clip-path: none !important;
     transform: rotate(var(--rot, 0deg)) !important;
   }
+}
+
+/* ============================================================
+   GRADUAL BLUR (Viewport-Ränder)
+   Progressiver Weichzeichner am unteren (und oberen) Rand:
+   mehrere gestaffelte backdrop-filter-Ebenen, jede über eine
+   mask-image-Rampe auf ihr Band begrenzt. Geometrie, Masken und
+   Blur-Stärken baut script.js (GradualBlur) — hier nur die
+   Grundhaltung, damit die Ebenen nie Interaktionen blockieren.
+   ============================================================ */
+.gradual-blur,
+.gradual-blur * { pointer-events: none; }
+.gradual-blur-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

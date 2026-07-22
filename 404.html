@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#111827" />
-  <title>agsork studio — Sichtbar werden im Thurgau</title>
+  <title>404 — Seite nicht gefunden | agsork studio</title>
+  <meta name="robots" content="noindex, follow" />
   <meta
     name="description"
     content="agsork studio baut visuell starke Websites für Unternehmen in Weinfelden und Umgebung — von Design bis Social Media."
@@ -42,51 +43,26 @@
 
   <link rel="stylesheet" href="/styles.css?v=1.4.11" />
 
-  <!-- Structured Data (Local SEO): lokales Unternehmen im Thurgau -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "agsork studio",
-    "description": "Webdesign, Entwicklung und Social Media Management für Unternehmen in Weinfelden und Umgebung.",
-    "url": "https://agsork.studio/",
-    "email": "adrian.kux@agsork.studio",
-    "telephone": "+41 78 269 42 29",
-    "image": "https://agsork.studio/og-image.jpg",
-    "priceRange": "CHF 249–1499",
-    "founder": { "@type": "Person", "name": "Adrian Kux" },
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Ottenbergstrasse 26",
-      "postalCode": "8572",
-      "addressLocality": "Berg",
-      "addressRegion": "Thurgau",
-      "addressCountry": "CH"
-    },
-    "areaServed": [
-      { "@type": "City", "name": "Weinfelden" },
-      { "@type": "City", "name": "Kreuzlingen" },
-      { "@type": "City", "name": "Frauenfeld" },
-      { "@type": "City", "name": "Romanshorn" },
-      { "@type": "City", "name": "Amriswil" },
-      { "@type": "AdministrativeArea", "name": "Thurgau" }
-    ],
-    "makesOffer": [
-      {
-        "@type": "Offer",
-        "name": "Website — Design, Umsetzung, Hosting & Wartung",
-        "priceSpecification": { "@type": "PriceSpecification", "price": 1499, "priceCurrency": "CHF" },
-        "description": "Einmalig CHF 1499 für Design, Umsetzung und Go-Live, danach CHF 14.99 pro Monat für Hosting und Wartung."
-      },
-      {
-        "@type": "Offer",
-        "name": "Social Media Management",
-        "priceSpecification": { "@type": "UnitPriceSpecification", "price": 249, "priceCurrency": "CHF", "unitText": "Monat" },
-        "description": "Betreuung von Instagram und Facebook, ein Beitrag pro Woche im Look deiner Marke."
-      }
-    ]
-  }
-  </script>
+  <style>
+    .notfound { min-height: 58vh; display: grid; place-items: center; text-align: center; }
+    .notfound .eyebrow { justify-content: center; }
+    .notfound h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--c-dark);
+      margin: 0.4em 0 0.35em;
+    }
+    .notfound p { color: var(--c-mid); max-width: 46ch; margin-inline: auto; }
+    .notfound-actions {
+      margin-top: var(--space-4);
+      display: flex;
+      gap: var(--space-2);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
 
 <body>
@@ -137,59 +113,19 @@
   </div>
 
   <main id="main">
-    <!-- ============================================================
-         HERO — Startseite
-         ============================================================ -->
-    <section class="hero" id="hero">
-      <div class="container hero-grid">
-        <!-- Textspalte: Hierarchie-Strips (Kicker → Headline → Sub → CTA → Trust) -->
-        <div class="hero-copy">
-          <h1 class="hero-title reveal">Sichtbar werden im&nbsp;Thurgau.</h1>
-          <p class="hero-sub reveal" style="--i: 1">
-            Wir gestalten, bauen und betreuen deine Website — für Unternehmen
-            in Weinfelden und Umgebung.
-          </p>
-          <div class="hero-actions reveal" style="--i: 2">
-            <a class="btn btn-primary magnetic" href="/kontakt/">Kostenloses Erstgespräch</a>
-            <a class="btn btn-ghost magnetic" href="/pricing/">Preise ansehen</a>
-          </div>
-          <ul class="hero-trust reveal" style="--i: 3">
-            <li>Lokal &amp; persönlich</li>
-            <li>Design bis Wartung</li>
-            <li>Keine versteckten Kosten</li>
-          </ul>
-        </div>
-
-        <!-- Visual: zeigt das Ergebnis (eine fertige Website) -->
-        <div class="hero-visual reveal" style="--i: 2" aria-hidden="true">
-          <div class="hv-browser">
-            <div class="hv-bar">
-              <span></span><span></span><span></span>
-              <em class="hv-url">deine-firma.ch</em>
-            </div>
-            <div class="hv-page">
-              <div class="hv-nav">
-                <span class="hv-logo"></span>
-                <span class="hv-links"><i></i><i></i><i></i></span>
-              </div>
-              <p class="hv-eyebrow">Tischlerei Meier</p>
-              <p class="hv-title">Massiv.<br />Gut&nbsp;gemacht.</p>
-              <span class="hv-cta">Termin anfragen</span>
-              <div class="hv-media"></div>
-            </div>
-          </div>
-          <div class="hv-badge">
-            <span class="hv-badge-swatches"><i></i><i></i><i></i></span>
-            Eigene Markenfarben
-          </div>
-          <p class="hv-note">Beispielhafte Darstellung</p>
+    <section class="section notfound">
+      <div class="container">
+        <p class="eyebrow">Fehler 404</p>
+        <h1>Diese Seite gibt es nicht.</h1>
+        <p>
+          Vielleicht wurde sie verschoben oder der Link stimmt nicht ganz.
+          Kein Problem — hier geht's weiter:
+        </p>
+        <div class="notfound-actions">
+          <a class="btn btn-primary magnetic" href="/">Zur Startseite</a>
+          <a class="btn btn-ghost magnetic" href="/kontakt/">Kontakt aufnehmen</a>
         </div>
       </div>
-
-      <a class="hero-scroll" href="/angebot/" aria-label="Zum Angebot">
-        <span>Mehr</span>
-        <span class="hero-scroll-line" aria-hidden="true"></span>
-      </a>
     </section>
   </main>
 
