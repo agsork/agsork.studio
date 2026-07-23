@@ -479,7 +479,10 @@ body.menu-open { overflow: hidden; } /* Seite hinter dem Overlay einfrieren */
   margin-right: 0.65rem;
   border-radius: 50%;
   background: var(--c-warm);
+  /* auf die Mitte der Grossbuchstaben ausrichten (statt x-Höhe);
+     em skaliert mit der Menü-Schriftgrösse, bleibt also über alle Breiten mittig */
   vertical-align: middle;
+  transform: translateY(-0.1em);
 }
 @media (prefers-reduced-motion: reduce) {
   .option-wheel__item { transition: color 0.2s ease; }
@@ -1787,14 +1790,6 @@ body.menu-open { overflow: hidden; } /* Seite hinter dem Overlay einfrieren */
 
 @media (max-width: 760px) {
   .contact-layout { grid-template-columns: 1fr; }
-}
-
-/* Hero-Mockup: Hinweis „beispielhafte Darstellung" (1.4) */
-.hv-note {
-  margin-top: 2.4rem;
-  text-align: center;
-  font-size: var(--fs-small);
-  color: var(--c-muted);
 }
 
 /* Portfolio: einladender CTA-Block zur Kontaktseite (1.4) */
